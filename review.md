@@ -1,3 +1,89 @@
+
+
+## Compiler Section:
+Question: Steps to get machine code from source code in C/C++?
+
+Preprocessor➡️Compiler➡️Assembler➡️Static Linker➡️Dynamic Linker
+
+Question: What does a perprocessor do in C/C++?
+
+Deal with any directives starting with `#` like #include and #define
+
+Question: What does compiler do:
+
+`Scanner` for tokens ➡️`Parser` for Annotated Abstract Syntax ➡️ `Semantic Routines` for Intermediate Representations ➡️ Optimizations ➡️ Code Generation
+
+Question: How is Heap implemented naively?
+
+as a `linked list` with variable-length data `data[0]`:
+```cpp
+struct chunk {
+    enum { FREE, USED } state;
+    int size;
+    struct chunk *next;
+    struct chunk *prev;
+    char data[0];
+};
+```
+
+To allocated memory call:
+```cpp
+struct chunk *c = malloc(sizeof(struct chunk) + 100);
+```
+
+### Optimization Techniques:
+1. Constant Folding
+2. Strenght Reduction `7*8 := 7 << 3`
+3. Loop Unrolling
+4. Code Hoisting
+5. Inlinining
+6. Deadcode Detetion
+7. * Registers over Stack over heap (heap needs to search for empty memory)
+8. * PGO (Profile Guded Optimization
+9. * Optimize for Size
+10. * Multi Processing
+* For low budget environments
+
+Types of Intermediate Representation:
+1. Annotated Abstract Syntax Tree
+2. Three Address Code
+3. Bytecode/Pseudo Assembly
+
+
+```bash
+Assign
+├── Target: Name(id=&#39;a&#39;, type=&#39;int&#39;)
+└── Value: BinOp
+    ├── Left: Name(id=&#39;b&#39;, type=&#39;int&#39;)
+    ├── Operator: Add
+    └── Right: Constant(value=1, type=&#39;int&#39;)
+
+t1 := a - b
+t2 := c + d
+t3 := t1 * t2
+p  := t3
+
+LOAD R1, a
+LOAD R2, b
+ADD  R3, R1, R2
+STORE x, R3
+```
+
+⚠️ for operations like `clip` and `sign` which are not differentiable, we use the `Straight-Through Estimator` technique. In Pytorch, we inherit from `torch.autograd.Function` and implement 2 methods `forward(ctx, input)` and `backward(ctx, grad_in)` which are decorated `@staticmethod`:
+```python
+class ClipSTE(torch.autograd.Function):
+    @staticmethod
+    def forward(ctx, input):
+        ctx.save_for_backward(input)
+        return input.clamp(-1, 1)
+
+    @staticmethod
+    def backward(ctx, grad_output):
+        input, = ctx.saved_tensors
+        grad_input = grad_output * ((input &gt;= -1) &amp; (input &lt;= 1))
+        return grad_input
+```
+
 ## Receiver-operating characteristic curve (ROC) and AUC
 ROC:  true positive rate (TPR) and false positive rate (FPR)
 <img width="1024" height="768" alt="image" src="https://github.com/user-attachments/assets/5d0bc4f9-3d03-4b29-bcf4-1be5214d1ed3" />
