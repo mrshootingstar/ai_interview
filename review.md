@@ -125,3 +125,81 @@ class Linear:
 | FFT | Fast Fourier Transform | `np.fft.fft(arr)` | `torch.fft.fft(tensor)` |
 | Polynomial Operations | Polynomial operations | `np.polynomial.polynomial.polyval()` | No direct equivalent |
 | Save/Load Arrays | Save/load arrays | `np.savez('file.npz', arr)` | `torch.save(tensor, 'file.pt')` |
+
+
+## Basic Squeeze/Excitation implementation:
+Here's how Squeeze-and-Excitation (SE) is implemented:
+
+## Core SE Block Implementation:
+
+```python
+import torch
+import torch.nn as nn
+
+class SEBlock(nn.Module):
+    def __init__(self, channels, reduction=16):
+        super().__init__()
+        self.squeeze = nn.AdaptiveAvgPool2d(1)  # Global average pooling
+        self.excitation = nn.Sequential(
+            nn.Linear(channels, channels // reduction, bias=False),
+            nn.ReLU(inplace=True),
+            nn.Linear(channels // reduction, channels, bias=False),
+            nn.Sigmoid()
+        )
+    
+    def forward(self, x):
+        # x shape: (batch, channels, height, width)
+        b, c, h, w = x.size()
+        
+        # Squeeze: Global average pooling
+        y = self.squeeze(x)  # (batch, channels, 1, 1)
+        y = y.view(b, c)     # (batch, channels)
+        
+        # Excitation: FC layers
+        y = self.excitation(y)  # (batch, channels)
+        y = y.view(b, c, 1, 1)  # (batch, channels, 1, 1)
+        
+        # Scale: Element-wise multiplication
+        return x * y.expand_as(x)
+```
+
+## Integration with ResNet Block:
+
+```python
+class SEResNetBlock(nn.Module):
+    def __init__(self, in_channels, out_channels, stride=1, reduction=16):
+        super().__init__()
+        self.conv1 = nn.Conv2d(in_channels, out_channels, 3, stride, 1, bias=False)
+        self.bn1 = nn.BatchNorm2d(out_channels)
+        self.conv2 = nn.Conv2d(out_channels, out_channels, 3, 1, 1, bias=False)
+        self.bn2 = nn.BatchNorm2d(out_channels)
+        
+        # SE block added here
+        self.se = SEBlock(out_channels, reduction)
+        
+        self.shortcut = nn.Sequential()
+        if stride != 1 or in_channels != out_channels:
+            self.shortcut = nn.Sequential(
+                nn.Conv2d(in_channels, out_channels, 1, stride, bias=False),
+                nn.BatchNorm2d(out_channels)
+            )
+    
+    def forward(self, x):
+        out = torch.relu(self.bn1(self.conv1(x)))
+        out = self.bn2(self.conv2(out))
+        
+        # Apply SE attention
+        out = self.se(out)
+        
+        out += self.shortcut(x)
+        return torch.relu(out)
+```
+
+## Key Implementation Details:
+
+- **Reduction ratio**: Typically 16 (reduces channels by 16x in bottleneck)
+- **Placement**: Usually after the last conv layer in a block, before residual addition
+- **Global pooling**: `AdaptiveAvgPool2d(1)` handles any input size
+- **Sigmoid activation**: Ensures attention weights are between 0-1
+
+The SE block is simple but effective - it learns to emphasize important channels and suppress less useful ones with minimal computational overhead.
