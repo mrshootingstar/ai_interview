@@ -1,3 +1,10 @@
+## Receiver-operating characteristic curve (ROC) and AUC
+ROC:  true positive rate (TPR) and false positive rate (FPR)
+<img width="1024" height="768" alt="image" src="https://github.com/user-attachments/assets/5d0bc4f9-3d03-4b29-bcf4-1be5214d1ed3" />
+
+[more details and visualizations](https://developers.google.com/machine-learning/crash-course/classification/roc-and-auc)
+
+
 ## Implementation of layers in numpy
 ```python
 import numpy as np
