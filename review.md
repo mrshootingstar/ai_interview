@@ -64,22 +64,26 @@ class CrossEntropyLoss:
 
 ####################[Linear Layer]###########################
 class Linear:
-  def __init__(self, in_features, out_features):
-    # Up to you to save self.W in a transposed form or not
-    self.W = np.random.randn(in_features, out_features)
-    self.b = np.random.randn(out_features)
+  def __init__(self, in_features, out_features):    # 2, 3
+    # Up to you to save self.W in a transposed form or not 
+    ''' w with intuitive shape '''
+    self.W = np.random.randn(in_features, out_features)  # [2, 3]
+    self.b = np.random.randn(out_features)               # [3]
 
-  def forward(self, x):
+  def forward(self, x):   # [2, 2]  batch of 2, each with 2 features
+    ''' x before w '''
     self.x = x
-    self.output = x @ self.W
+    self.output = x @ self.W              
     self.output += self.b
-    return self.output
+    return self.output          # [2, 3]
 
   def backward(self, grad_in):
-    self.grad_W = self.x.T @ grad_in
-    self.grad_b = np.sum(grad_in, axis=0)
-    self.grad_in = grad_in @ self.W.T
+    ''' x.T before grad_in before w.T '''
+    self.grad_W = self.x.T @ grad_in     # [2, 2] @ [2, 3] -> [2,3]
+    self.grad_b = np.sum(grad_in, axis=0)    # [3]  across batches
+    self.grad_in = grad_in @ self.W.T    
     return self.grad_in
+
 ```
 
 
