@@ -203,3 +203,97 @@ class SEResNetBlock(nn.Module):
 - **Sigmoid activation**: Ensures attention weights are between 0-1
 
 The SE block is simple but effective - it learns to emphasize important channels and suppress less useful ones with minimal computational overhead.
+
+
+## Selection of Graph Questions
+| Status | Problem | Number | Key Algorithm/Pattern | Time Complexity | Notes |
+|--------|---------|--------|----------------------|-----------------|-------|
+|✔️| Number of Islands | 200 | DFS/BFS | O(V+E) | Grid traversal, mark visited |
+|✔️| Number of Provinces | 547 | DFS/Union-Find | O(V²) | Adjacency matrix traversal |
+|✔️| Number of Connected Components | 323 | DFS/Union-Find | O(V+E) | Count | components in undirected graph |
+|✔️| Graph Valid Tree | 261 | DFS/Union-Find | O(V+E) | Check n-1 edges, no cycles, connected |
+|✔️| Redundant Connection | 684 | Union-Find | O(α(n)) | Find edge that creates cycle |
+|✔️| Is Graph Bipartite? | 785 | DFS/BFS Coloring | O(V+E) | 2-coloring problem |
+|✔️| Possible Bipartition | 886 | DFS/BFS Coloring | O(V+E) | Bipartite graph variant |
+|✔️| Course Schedule | 207 | Topological Sort (Kahn/DFS) | O(V+E) | Cycle detection in directed graph |
+|✔️| Course Schedule II | 210 | Topological Sort (Kahn/DFS) | O(V+E) | Return topological ordering |
+|✔️| Alien Dictionary | 269 | Topological Sort (Kahn) | O(V+E) | Early return if word2 prefix of word1 <br> check if all letters are processed <br>⚠️We don't have to check if an edige already exists. WHY?|
+|⚠️✔️| Critical Connections | 1192 | Tarjan's Algorithm | O(V+E) | Find bridges in graph |
+|✔️| Find Eventual Safe States | 802 | Topological Sort/DFS | O(V+E) | Reverse graph, find nodes with no outgoing edges. ⚠️ yet better use `DFS` |
+|⚠️✔️| Network Delay Time | 743 | Dijkstra | O((V+E)logV) | Single source shortest path |
+|✔️| Cheapest Flights K Stops | 787 | Bellman-Ford/BFS | O(K*E) | BFS with relaxing cost, 3D approach<br>💡Bellman-Ford is actually pretty neat |
+|✔️| Path With Minimum Effort | 1631 | Dijkstra/Binary Search | O(V*logV) | Skip worse efforts after heap pop |
+|✔️| Min Cost to Connect Points | 1584 | Prim/Kruskal MST | O(V²)/O(ElogE) | Optimized Prim O(V²), Kruskal better for sparse |
+|✔️| Connecting Cities With Minimum Cost | 1135 | Kruskal MST | O(ElogE) | Standard MST problem |
+|✔️| Binary Tree Inorder | 94 | DFS Traversal | O(n) | Left, root, right |
+|✔️| Level Order | 102 | BFS | O(n) | Queue-based traversal |
+|⚠️✔️| Serialize/Deserialize | 297 | DFS/BFS | O(n) | Tree encoding/decoding |
+|✔️| LCA of Binary Tree | 236 | DFS | O(n) | Check if root is answer before recursion |
+|✔️| LCA of BST | 235 | DFS | O(h) | Use BST property |
+|✔️| Binary Tree Max Path Sum | 124 | DFS | O(n) | Only take positive gains |
+|✔️| Diameter of Binary Tree | 543 | DFS | O(n) | Max path through any node |
+|🔲| Flower Planting With No Adjacent | 1042 | Graph Coloring | O(V+E) | 4-coloring problem |
+|🔲| Remove Max Number of Edges | 1579 | Union-Find | O(α(n)) | Keep minimum edges for connectivity |
+|🔲| Minimum Days to Disconnect Island | 1568 | Articulation Points/DFS | O(V+E) | Answer is always 0, 1, or 2; find cut vertices |
+|| **Find the City** | **1334** | **Dijkstra/Floyd-Warshall** | **O(V³)** | **All pairs shortest path** 💡Floyd Warshall|
+| | **Evaluate Division** | **399** | **DFS/Union-Find** | **O(V+E)** | **Weighted graph with ratios** |
+| | **Reconstruct Itinerary** | **332** | **DFS/Eulerian Path** | **O(ElogE)** | **Find Eulerian path, lexicographic order** |
+| | **All Paths Source to Destination** | **1059** | **DFS** | **O(V+E)** | **Check all paths lead to target** |
+| | **Shortest Path Alternating Colors** | **1129** | **BFS** | **O(V+E)** | **State-based BFS with colors** |
+| | **Shortest Path in Binary Matrix** | **1091** | **BFS** | **O(V+E)** | **Grid BFS with obstacles** |
+| | **Rotting Oranges** | **994** | **Multi-source BFS** | **O(V+E)** | **BFS from multiple starting points** |
+| | **Accounts Merge** | **721** | **Union-Find/DFS** | **O(α(n))** | **Group connected components** |
+|⚠️| **Smallest String With Swaps** | **1202** | **Union-Find** | **O(α(n))** | **Sort within connected components** |
+|❌| **Word Search** | **79** | **Backtracking** | **O(4^L)** | **DFS with backtracking on grid** |
+|❌| **Word Search II** | **212** | **Trie + Backtracking** | **O(4^L)** | **Multiple word search with trie** |
+
+Here are specific LeetCode problems for the missing topics:
+
+## Strongly Connected Components
+| Status | Problem | Number | Key Algorithm/Pattern | Time Complexity | Notes |
+|--------|---------|--------|----------------------|-----------------|-------|
+| | **Strongly Connected Components** | **1192** | **Tarjan's Algorithm** | **O(V+E)** | **Critical Connections - find bridges** |
+| | **Maximum Students Taking Exam** | **1349** | **Bipartite Matching/DP** | **O(m*2^n)** | **State compression DP** |
+
+## Articulation Points & Bridges
+| Status | Problem | Number | Key Algorithm/Pattern | Time Complexity | Notes |
+|--------|---------|--------|----------------------|-----------------|-------|
+| | **Critical Connections in Network** | **1192** | **Tarjan's Algorithm** | **O(V+E)** | **Find bridges in undirected graph** |
+
+## Advanced Graph Problems
+| Status | Problem | Number | Key Algorithm/Pattern | Time Complexity | Notes |
+|--------|---------|--------|----------------------|-----------------|-------|
+| | **Satisfiability of Equality Equations** | **990** | **Union-Find** | **O(α(n))** | **Process != constraints after == constraints** |
+| | **Most Stones Removed** | **947** | **Union-Find/DFS** | **O(α(n))** | **Count connected components, answer = stones - components** |
+| | **Swim in Rising Water** | **778** | **Dijkstra/Binary Search + DFS** | **O(V²logV)** | **Modified shortest path with time constraint** |
+| | **Bus Routes** | **815** | **BFS** | **O(V+E)** | **Graph of bus routes, not stops** |
+| | **Word Ladder** | **127** | **BFS** | **O(V+E)** | **Shortest transformation sequence** |
+| | **Word Ladder II** | **126** | **BFS + DFS** | **O(V+E)** | **All shortest transformation sequences** |
+| | **Clone Graph** | **133** | **DFS/BFS** | **O(V+E)** | **Deep copy of graph with HashMap** |
+
+## Tree/Graph Traversal & Special Cases
+| Status | Problem | Number | Key Algorithm/Pattern | Time Complexity | Notes |
+|--------|---------|--------|----------------------|-----------------|-------|
+| | **Vertical Order Traversal** | **987** | **BFS/DFS + Sorting** | **O(nlogn)** | **Coordinate-based traversal** |
+| | **Binary Tree Right Side View** | **199** | **BFS/DFS** | **O(n)** | **Level order, take rightmost** |
+| | **Boundary of Binary Tree** | **545** | **DFS** | **O(n)** | **Left boundary + leaves + right boundary** |
+
+## Advanced Union-Find
+| Status | Problem | Number | Key Algorithm/Pattern | Time Complexity | Notes |
+|--------|---------|--------|----------------------|-----------------|-------|
+| | **Regions Cut by Slashes** | **959** | **Union-Find** | **O(n²α(n))** | **Split each cell into 4 triangles** |
+| | **Bricks Falling When Hit** | **803** | **Union-Find (Reverse)** | **O(mn α(mn))** | **Process in reverse order** |
+
+## Graph Coloring & Matching
+| Status | Problem | Number | Key Algorithm/Pattern | Time Complexity | Notes |
+|--------|---------|--------|----------------------|-----------------|-------|
+| | **Flower Planting With No Adjacent** | **1042** | **Graph Coloring** | **O(V+E)** | **4-coloring problem** |
+| | **Coloring A Border** | **1034** | **DFS** | **O(mn)** | **Connected component boundary coloring** |
+
+## Advanced Shortest Path
+| Status | Problem | Number | Key Algorithm/Pattern | Time Complexity | Notes |
+|--------|---------|--------|----------------------|-----------------|-------|
+| | **Shortest Path Visiting All Nodes** | **847** | **BFS + Bitmask** | **O(2^n * n²)** | **TSP variant with BFS** |
+| | **Minimum Cost to Make Valid Path** | **1368** | **Dijkstra/0-1 BFS** | **O(mn)** | **Grid with directional costs** |
+
+These additions cover the major missing algorithmic patterns in graph theory that commonly appear in technical interviews.
